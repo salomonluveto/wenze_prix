@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import '../../service/admin/AdminService.dart'; // Assurez-vous que le chemin est correct
 
-// Classe pour représenter une liste
 class Liste {
   final String nom;
-
   final String image;
   final String prix;
 
-  Liste({required this.nom,  required this.image, required this.prix});
+  Liste({required this.nom, required this.image, required this.prix});
 }
 
 class ProduitPage extends StatefulWidget {
@@ -19,52 +18,35 @@ class _ProduitPageState extends State<ProduitPage> {
   var _listes = <Liste>[]; // Liste d'articles
   var _filteredListes = <Liste>[];
   final TextEditingController _searchController = TextEditingController();
+  final AdminService adminService = AdminService(); // Instance du service
 
   @override
   void initState() {
     super.initState();
-    _fetchListes(); // Récupérer les articles statiques
+    _fetchListes(); // Récupérer les articles
     _searchController.addListener(_filterListe);
   }
 
   Future<void> _fetchListes() async {
     // Création d'une liste d'articles statiques
-    final articles = [
-      Liste(
-        nom: "Piments",
-
-        image: "images/panier2.jpg",
-        prix: "Prix : 200 fc",
-      ),
-      Liste(
-        nom: "Choux",
-
-        image: "images/panier2.jpg",
-        prix: "Prix : 200 fc",
-      ),
-      Liste(
-        nom: "Mais",
-
-        image: "images/panier2.jpg",
-        prix: "Prix : 200 fc",
-      ),
-      Liste(
-        nom: "Piments",
-
-        image: "images/panier2.jpg",
-        prix: "Prix : 200 fc",
-      ),
-      Liste(
-        nom: "Piments",
-
-        image: "images/panier2.jpg",
-        prix: "Prix : 200 fc",
-      ),
+    final staticArticles = [
+      Liste(nom: "Piments", image: "images/panier2.jpg", prix: "Prix : 200 fc"),
+      Liste(nom: "Choux", image: "images/panier2.jpg", prix: "Prix : 200 fc"),
+      Liste(nom: "Mais", image: "images/panier2.jpg", prix: "Prix : 200 fc"),
+      // Ajoutez d'autres articles si nécessaire
     ];
 
     setState(() {
-      _listes = articles;
-      _filteredListes = articles; // Initialisation avec tous les articles
+      _listes = staticArticles.take(3).toList(); // Afficher les trois premiers
+      _filteredListes = _listes; // Initialisation avec les trois premiers articles
+    });
+
+    // Récupérer des produits depuis le service
+    List<Liste> articles = await adminService.recupererProduits();
+    print("articles :$articles");
+    setState(() {
+      _listes.addAll(articles); // Ajouter les produits récupérés
+      _filteredListes = _listes; // Mettre à jour la liste filtrée
     });
   }
 
@@ -78,8 +60,7 @@ class _ProduitPageState extends State<ProduitPage> {
   }
 
   Future<void> _refreshData() async {
-    // Appeler la méthode pour récupérer les articles à nouveau
-    await _fetchListes();
+    await _fetchListes(); // Récupérer à nouveau les articles
   }
 
   @override
@@ -117,7 +98,7 @@ class _ProduitPageState extends State<ProduitPage> {
                 itemCount: _filteredListes.length,
                 itemBuilder: (context, index) {
                   final article = _filteredListes[index];
-                  return buildNewsCard(article.nom,  article.image, article.prix);
+                  return buildNewsCard(article.nom, article.image, article.prix);
                 },
               ),
             ),
@@ -127,7 +108,7 @@ class _ProduitPageState extends State<ProduitPage> {
     );
   }
 
-  Widget buildNewsCard(String nom,  String imageUrl, String prix) {
+  Widget buildNewsCard(String nom, String imageUrl, String prix) {
     return InkWell(
       onTap: () {
         // Action lors du clic sur la carte
@@ -143,7 +124,7 @@ class _ProduitPageState extends State<ProduitPage> {
                 height: 100,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage("$imageUrl"),
+                    image: AssetImage(imageUrl),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -159,8 +140,6 @@ class _ProduitPageState extends State<ProduitPage> {
                       nom,
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 5),
-
                     SizedBox(height: 5),
                     Text(
                       prix,

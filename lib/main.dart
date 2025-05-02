@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wenze_prix/pages/admin/AccueilPage.dart';
 import 'package:wenze_prix/pages/client/IntroPage.dart';
 
 void main() {
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: IntroPage(),
+      home: AccueilPage(),
     );
   }
 }

@@ -1,6 +1,5 @@
-
 import 'package:flutter/material.dart';
-
+import '../../service/admin/AdminService.dart'; // Ajustez le chemin si nécessaire
 
 class AjouterProduitPage extends StatefulWidget {
   @override
@@ -9,12 +8,9 @@ class AjouterProduitPage extends StatefulWidget {
 
 class _AjouterProduitPageState extends State<AjouterProduitPage> {
   final _formKey = GlobalKey<FormState>();
+  final AdminService adminService = AdminService(); // Instance du service
 
-
-
-  // Variables pour les champs de saisie
   String nom = '';
-
   String prix = '';
   String qte = '';
 
@@ -22,20 +18,21 @@ class _AjouterProduitPageState extends State<AjouterProduitPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: 40,),
-              Text("Ajouter un produit", style: TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
-                color: Colors.green,
-              ),),
-              SizedBox(height: 40,),
-
+              SizedBox(height: 40),
+              Text(
+                "Ajouter un produit",
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.green,
+                ),
+              ),
+              SizedBox(height: 40),
               Form(
                 key: _formKey,
                 child: Column(
@@ -43,9 +40,6 @@ class _AjouterProduitPageState extends State<AjouterProduitPage> {
                     _buildTextField("Nom", (value) {
                       nom = value;
                     }),
-
-                    SizedBox(height: 16),
-
                     SizedBox(height: 16),
                     _buildTextField("Prix", (value) {
                       prix = value;
@@ -54,10 +48,6 @@ class _AjouterProduitPageState extends State<AjouterProduitPage> {
                     _buildTextField("Quantité", (value) {
                       qte = value;
                     }),
-
-                    SizedBox(height: 16),
-
-
                     SizedBox(height: 16),
                     _buildSubmitButton(),
                   ],
@@ -70,7 +60,6 @@ class _AjouterProduitPageState extends State<AjouterProduitPage> {
     );
   }
 
-  // Champ de texte personnalisé
   Widget _buildTextField(String label, Function(String) onChanged) {
     return TextFormField(
       decoration: InputDecoration(
@@ -94,22 +83,28 @@ class _AjouterProduitPageState extends State<AjouterProduitPage> {
     );
   }
 
-  // Dropdown personnalisé
-
-  // Champ de date personnalisé
-
-
-  // Bouton de soumission
   Widget _buildSubmitButton() {
     return ElevatedButton(
-      onPressed: () {
+      onPressed: () async {
         if (_formKey.currentState!.validate()) {
           // Traitez les données du formulaire ici
-          print("Nom: $nom");
+          var res = await adminService.enregistrerProduit(nom, prix, qte);
 
+          // Afficher un message de succès
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Produit ajouté avec succès !"),
+              backgroundColor: Colors.green,
+            ),
+          );
 
-          print("peix : $prix");
-          print("quantite: $qte");
+          // Réinitialiser les champs de saisie
+          _formKey.currentState!.reset();
+          setState(() {
+            nom = '';
+            prix = '';
+            qte = '';
+          });
         }
       },
       style: ElevatedButton.styleFrom(
