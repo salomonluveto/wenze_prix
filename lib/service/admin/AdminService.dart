@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../model/Liste.dart';
 import '../../pages/admin/ProduitPage.dart';
 
 

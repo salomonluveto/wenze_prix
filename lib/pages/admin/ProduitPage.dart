@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../model/Liste.dart';
 import '../../service/admin/AdminService.dart'; // Assurez-vous que le chemin est correct
 
-class Liste {
-  final String nom;
-  final String image;
-  final String prix;
-
-  Liste({required this.nom, required this.image, required this.prix});
-}
 
 class ProduitPage extends StatefulWidget {
   @override
@@ -30,9 +24,9 @@ class _ProduitPageState extends State<ProduitPage> {
   Future<void> _fetchListes() async {
     // Création d'une liste d'articles statiques
     final staticArticles = [
-      Liste(nom: "Piments", image: "images/panier2.jpg", prix: "Prix : 200 fc"),
-      Liste(nom: "Choux", image: "images/panier2.jpg", prix: "Prix : 200 fc"),
-      Liste(nom: "Mais", image: "images/panier2.jpg", prix: "Prix : 200 fc"),
+      Liste(nom: "Piments", image: "images/panier2.jpg", prix: "200 "),
+      Liste(nom: "Choux", image: "images/panier2.jpg", prix: " 200 "),
+      Liste(nom: "Mais", image: "images/panier2.jpg", prix: " 200 "),
       // Ajoutez d'autres articles si nécessaire
     ];
 
@@ -142,7 +136,7 @@ class _ProduitPageState extends State<ProduitPage> {
                     ),
                     SizedBox(height: 5),
                     Text(
-                      prix,
+                      "prix :$prix fc",
                       style: TextStyle(color: Colors.grey),
                     ),
                   ],
