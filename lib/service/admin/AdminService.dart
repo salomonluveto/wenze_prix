@@ -22,7 +22,7 @@ class AdminService {
     for (String key in prefs.getKeys()) {
       if (key.endsWith('.nom') && key.startsWith('produit_')) { // Filtrer par préfixe
         String nom = prefs.getString(key)!;
-        String prix = prefs.getString('${nom}.prix') ?? '';
+        String prix = prefs.getString('produit_${nom}.prix') ?? '';
         produits.add(Liste(nom: nom, image: "images/panier2.jpg", prix: prix));
       }
     }

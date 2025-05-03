@@ -112,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                   });
                   print("success  : $success");
 
-                  if(email =="salomon@gmail.com" && password == "123456"){
+                  if(email =="nathan@gmail.com" && password == "123456"){
 
                     Navigator.pushReplacement(
                       context,

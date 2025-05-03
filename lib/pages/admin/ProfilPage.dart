@@ -41,10 +41,10 @@ class _ProfilePageState extends State<ProfilePage> {
               SizedBox(height: 20),
 
               // Informations supplémentaires
-              buildInfoCard("Nom:", "Luveto"),
+              buildInfoCard("Nom:", "Kukungama"),
               buildInfoCard("Genre:", "Masculin"),
               buildInfoCard("Ville:", "Kinshasa"),
-              buildInfoCard("Email:", "luveto@gmail.com"),
+              buildInfoCard("Email:", "nathan@gmail.com"),
 
               SizedBox(height: 20),
 
