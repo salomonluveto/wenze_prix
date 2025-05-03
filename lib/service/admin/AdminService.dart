@@ -7,10 +7,10 @@ class AdminService {
   // Méthode pour enregistrer un produit
   Future<void> enregistrerProduit(String nom, String prix, String qte) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    // Utiliser le nom comme clé pour stocker le produit
-    await prefs.setString('$nom.nom', nom);
-    await prefs.setString('$nom.prix', prix);
-    await prefs.setString('$nom.qte', qte);
+    // Utiliser un préfixe pour le nom du produit
+    await prefs.setString('produit_$nom.nom', nom);
+    await prefs.setString('produit_$nom.prix', prix);
+    await prefs.setString('produit_$nom.qte', qte);
   }
 
   // Méthode pour récupérer tous les produits
@@ -20,7 +20,7 @@ class AdminService {
 
     // Parcourir les clés pour récupérer les produits
     for (String key in prefs.getKeys()) {
-      if (key.endsWith('.nom')) { // Vérifier si c'est une clé de produit
+      if (key.endsWith('.nom') && key.startsWith('produit_')) { // Filtrer par préfixe
         String nom = prefs.getString(key)!;
         String prix = prefs.getString('${nom}.prix') ?? '';
         produits.add(Liste(nom: nom, image: "images/panier2.jpg", prix: prix));

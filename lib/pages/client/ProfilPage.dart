@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wenze_prix/pages/client/LoginPage.dart';
-// Importer le ClientService
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../service/client/ClientService.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -27,12 +25,26 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _loadUserData() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      nom = prefs.getString('${prefs.getString("email")}.nom') ?? 'Inconnu';
-      genre = prefs.getString('${prefs.getString("email")}.sexe') ?? 'Inconnu';
-      ville = prefs.getString('${prefs.getString("email")}.ville') ?? 'Inconnu';
-      email = prefs.getString('${prefs.getString("email")}.email') ?? 'Inconnu';
-    });
+
+    // Récupérer l'email enregistré
+    String? storedEmail = prefs.getString("email");
+
+    if (storedEmail != null) {
+      setState(() {
+        email = storedEmail;
+        nom = prefs.getString("$email.nom") ?? 'Inconnu';
+        genre = prefs.getString("$email.sexe") ?? 'Inconnu';
+        ville = prefs.getString("$email.ville") ?? 'Inconnu';
+      });
+    } else {
+      // Gérer le cas où l'email n'est pas trouvé
+      setState(() {
+        email = 'Inconnu';
+        nom = 'Inconnu';
+        genre = 'Inconnu';
+        ville = 'Inconnu';
+      });
+    }
   }
 
   @override
@@ -45,7 +57,6 @@ class _ProfilePageState extends State<ProfilePage> {
           padding: EdgeInsets.all(16.0),
           child: Column(
             children: [
-              // Image de profil en cercle
               ClipOval(
                 child: Image.asset(
                   imageUrl,
@@ -54,29 +65,19 @@ class _ProfilePageState extends State<ProfilePage> {
                   fit: BoxFit.cover,
                 ),
               ),
-
               SizedBox(height: 20),
-
-              // Informations supplémentaires
               buildInfoCard("Nom:", nom),
               buildInfoCard("Genre:", genre),
               buildInfoCard("Ville:", ville),
               buildInfoCard("Email:", email),
-
               SizedBox(height: 20),
-
-              // Bouton de déconnexion
               ElevatedButton(
                 onPressed: () async {
-                  // Déconnexion de l'utilisateur
-                  // Exemple d'appel dans ProfilePage
-                  await clientService.deconnecterClient(email);
 
-                  // Naviguer vers la page de connexion
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => LoginPage()),
-                        (Route<dynamic> route) => false, // Supprime toutes les routes précédentes
+                        (Route<dynamic> route) => false,
                   );
                 },
                 child: Text("Se déconnecter"),

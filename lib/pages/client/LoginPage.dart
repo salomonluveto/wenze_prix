@@ -110,6 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                   setState(() {
                     _isLoading = false; // Arrêter le chargement
                   });
+                  print("success  : $success");
 
                   if(email =="salomon@gmail.com" && password == "123456"){
 

@@ -9,13 +9,13 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final _formKey = GlobalKey<FormState>();
+  final _formKeyUser = GlobalKey<FormState>();
 
   String? _sexe;
   List<String> _sexeOptions = ['Homme', 'Femme'];
 
   // Variables pour les champs de saisie
-  String nom = '';
+  String nom_user = '';
   String email = '';
   String ville = '';
   String password = '';
@@ -44,11 +44,11 @@ class _RegisterPageState extends State<RegisterPage> {
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Form(
-            key: _formKey,
+            key: _formKeyUser,
             child: Column(
               children: [
                 _buildTextField("Nom", (value) {
-                  nom = value;
+                  nom_user = value;
                 }),
                 SizedBox(height: 16),
                 _buildDropdown("Sexe", _sexeOptions, (value) {
@@ -134,9 +134,9 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget _buildSubmitButton() {
     return ElevatedButton(
       onPressed: () async {
-        if (_formKey.currentState!.validate()) {
+        if (_formKeyUser.currentState!.validate()) {
           // Traitez les données du formulaire ici
-          await clientService.inscrireClient(nom, email, password, _sexe!, ville);
+          await clientService.inscrireClient(nom_user, email, password, _sexe!, ville);
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text('Inscription réussie !')),
           );
