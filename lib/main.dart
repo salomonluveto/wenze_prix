@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wenze_prix/pages/admin/AccueilPage.dart';
+import 'package:wenze_prix/pages/admin/AccueilPageAdmin.dart';
 import 'package:wenze_prix/pages/client/IntroPage.dart';
 
 void main() {

@@ -7,12 +7,12 @@ import 'package:wenze_prix/pages/admin/ProfilPage.dart';
 
 
 
-class AccueilPage extends StatefulWidget {
+class AccueilPageAdmin extends StatefulWidget {
   @override
-  _AccueilPageState createState() => _AccueilPageState();
+  _AccueilPageAdminState createState() => _AccueilPageAdminState();
 }
 
-class _AccueilPageState extends State<AccueilPage> {
+class _AccueilPageAdminState extends State<AccueilPageAdmin> {
   int _selectedIndex = 0;
 
   // Liste des pages

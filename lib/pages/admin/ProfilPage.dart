@@ -1,6 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:wenze_prix/pages/client/LoginPage.dart';
+
+import '../../service/client/ClientService.dart';
+ // Importer le ClientService
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -9,6 +11,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final String imageUrl = 'images/panier2.jpg'; // Chemin vers l'image
+  final ClientService clientService = ClientService(); // Instance du service
 
   @override
   void initState() {
@@ -38,18 +41,20 @@ class _ProfilePageState extends State<ProfilePage> {
               SizedBox(height: 20),
 
               // Informations supplémentaires
-              buildInfoCard("Nom:", "Lukeba"),
+              buildInfoCard("Nom:", "Luveto"),
               buildInfoCard("Genre:", "Masculin"),
               buildInfoCard("Ville:", "Kinshasa"),
-              buildInfoCard("Email:", "lukeba@example.com"),
-
+              buildInfoCard("Email:", "luveto@gmail.com"),
 
               SizedBox(height: 20),
 
               // Bouton de déconnexion
               ElevatedButton(
                 onPressed: () async {
-                  // Naviguer vers la page de connexion en supprimant toutes les autres pages
+                  // Déconnexion de l'utilisateur
+
+
+                  // Naviguer vers la page de connexion
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => LoginPage()),

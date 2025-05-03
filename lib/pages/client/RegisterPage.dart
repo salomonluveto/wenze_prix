@@ -1,6 +1,7 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:wenze_prix/pages/client/AccueilPage.dart';
 
+import '../../service/client/ClientService.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -15,18 +16,18 @@ class _RegisterPageState extends State<RegisterPage> {
 
   // Variables pour les champs de saisie
   String nom = '';
-
   String email = '';
   String ville = '';
-
   String password = '';
+
+  final ClientService clientService = ClientService(); // Instance du service
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        automaticallyImplyLeading: false, // Désactiver la flèche de retour
+        automaticallyImplyLeading: false,
         title: Center(
           child: Text(
             "Inscription",
@@ -49,15 +50,12 @@ class _RegisterPageState extends State<RegisterPage> {
                 _buildTextField("Nom", (value) {
                   nom = value;
                 }),
-
                 SizedBox(height: 16),
                 _buildDropdown("Sexe", _sexeOptions, (value) {
                   setState(() {
                     _sexe = value;
                   });
                 }),
-                SizedBox(height: 16),
-
                 SizedBox(height: 16),
                 _buildTextField("Email", (value) {
                   email = value;
@@ -66,9 +64,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 _buildTextField("Ville", (value) {
                   ville = value;
                 }),
-
                 SizedBox(height: 16),
-
                 _buildTextField("Password", (value) {
                   password = value;
                 }),
@@ -82,7 +78,6 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  // Champ de texte personnalisé
   Widget _buildTextField(String label, Function(String) onChanged) {
     return TextFormField(
       decoration: InputDecoration(
@@ -106,7 +101,6 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  // Dropdown personnalisé
   Widget _buildDropdown(String label, List<String> options, Function(String?) onChanged) {
     return DropdownButtonFormField<String>(
       decoration: InputDecoration(
@@ -137,21 +131,20 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  // Champ de date personnalisé
-
-
-  // Bouton de soumission
   Widget _buildSubmitButton() {
     return ElevatedButton(
-      onPressed: () {
+      onPressed: () async {
         if (_formKey.currentState!.validate()) {
           // Traitez les données du formulaire ici
-          print("Nom: $nom");
+          await clientService.inscrireClient(nom, email, password, _sexe!, ville);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Inscription réussie !')),
+          );
 
-          print("Sexe: $_sexe");
-          print("Email : $email");
-          print("Ville: $ville");
-          print("Password : $password");
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AccueilPage()),
+            );
         }
       },
       style: ElevatedButton.styleFrom(

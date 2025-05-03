@@ -1,7 +1,10 @@
-
 import 'package:flutter/material.dart';
+import 'package:wenze_prix/pages/admin/AccueilPageAdmin.dart';
 import 'package:wenze_prix/pages/client/AccueilPage.dart';
 import 'package:wenze_prix/pages/client/RegisterPage.dart';
+
+import '../../service/client/ClientService.dart';
+
 
 class LoginPage extends StatefulWidget {
   @override
@@ -9,6 +12,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final ClientService clientService = ClientService(); // Instance du service
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
 
   @override
@@ -40,6 +46,7 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: TextField(
+                  controller: _emailController,
                   decoration: InputDecoration(
                     label: Text("Email"),
                     border: OutlineInputBorder(
@@ -62,6 +69,7 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: TextField(
+                  controller: _passwordController,
                   decoration: InputDecoration(
                     label: Text("Mot de passe"),
                     prefixIcon: Icon(Icons.lock),
@@ -84,20 +92,48 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
+                  obscureText: true, // Pour masquer le mot de passe
                 ),
               ),
-
-
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
-                  Navigator.push(
-                     context,
-                     MaterialPageRoute(builder: (context) => AccueilPage()),
-                   );
+                  setState(() {
+                    _isLoading = true; // Démarrer le chargement
+                  });
+
+                  String email = _emailController.text;
+                  String password = _passwordController.text;
+
+                  // Vérifier les informations d'identification
+                  bool success = await clientService.verifierClient(email, password);
+                  setState(() {
+                    _isLoading = false; // Arrêter le chargement
+                  });
+
+                  if(email =="salomon@gmail.com" && password == "123456"){
+
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => AccueilPageAdmin()),
+                    );
+                  }
+
+               else   if (success) {
+                    // Naviguer vers la page d'accueil
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => AccueilPage()),
+                    );
+                  } else {
+                    // Afficher un message d'erreur
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Email ou mot de passe incorrect')),
+                    );
+                  }
                 },
                 child: _isLoading
-                    ? CircularProgressIndicator() // Affiche un indicateur de chargement
+                    ? CircularProgressIndicator()
                     : Text("Se connecter"),
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(horizontal: 95),
@@ -105,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
                   foregroundColor: Colors.white,
                 ),
               ),
-              SizedBox(height: 10,),
+              SizedBox(height: 10),
               // Texte pour s'inscrire sur la même ligne
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -114,7 +150,7 @@ class _LoginPageState extends State<LoginPage> {
                   GestureDetector(
                     onTap: () {
                       // Naviguer vers la page d'inscription
-                     Navigator.push(
+                      Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => RegisterPage()),
                       );
